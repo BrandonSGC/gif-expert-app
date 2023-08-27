@@ -1,25 +1,18 @@
-import { useEffect, useState } from 'react';
-import { getGifs } from '../helpers/getGifs';
 import { GifItem } from './GifItem';
+import { useFetchGifs } from '../hooks/useFetchGifs';
+import { useState } from 'react';
 
 export const GifGrid = ( {category} ) => {
 
-    const [gifInfo, setGifInfo] = useState([]);
+    const {gifInfo, isLoading} = useFetchGifs(category);
 
-    const getGifInfo = async () => {
-      const gifs = await getGifs(category);
-      setGifInfo(gifs);
-    } 
-
-    // Lo que haya dentro del useEffect solo se va a cargar 
-    // la primera vez que se renderice el componente...
-    useEffect( () => {
-      getGifInfo();
-    }, [] )
-  
     return (
     <>
         <h3>{ category }</h3>
+      
+        {
+          isLoading && ( <h2>Cargando...</h2> )
+        }
 
         <div className='card-grid'>
           {
